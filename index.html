@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F7F7F5">
+<title>林小满 · 电商运营与私域增长</title>
+<style>
+  :root {
+    --bg: #F7F7F5; --card: #FFFFFF; --text: #1F1F1D; --muted: #6B6B66;
+    --line: #E4E4DF; --accent: #0F6E56; --accent-soft: #E1F5EE; --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+    line-height: 1.7; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+  }
+  .nav .logo { font-size: 15px; font-weight: 500; letter-spacing: .5px; }
+  .nav nav { display: flex; gap: 22px; }
+  .nav nav a { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .nav nav a:hover { color: var(--text); }
+
+  header { padding: 64px 0 48px; }
+  .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 500; border: 1px solid #B7E1D2; margin-bottom: 24px;
+  }
+  h1 { font-size: 36px; font-weight: 500; letter-spacing: -0.5px; line-height: 1.25; }
+  .tagline { font-size: 17px; color: var(--muted); margin-top: 12px; max-width: 580px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+  .chip {
+    font-size: 13px; padding: 5px 12px; border-radius: 999px;
+    background: var(--card); border: 1px solid var(--line); color: var(--muted);
+  }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn {
+    display: inline-flex; align-items: center; padding: 11px 20px; border-radius: 10px;
+    font-size: 14px; text-decoration: none; border: 1px solid var(--line);
+    background: var(--card); color: var(--text); transition: .18s;
+  }
+  .btn:hover { border-color: #C9C9C2; transform: translateY(-1px); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #0C5B47; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 56px;
+  }
+  .stat { background: var(--card); padding: 22px 20px; }
+  .stat .n { font-size: 26px; font-weight: 500; letter-spacing: -0.5px; }
+  .stat .l { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  section { padding: 8px 0 52px; }
+  h2 {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    letter-spacing: 1.5px; margin-bottom: 22px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 26px 28px;
+  }
+  .card p + p { margin-top: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .grid .card h3 { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .grid .card p { font-size: 14px; color: var(--muted); }
+  .grid .card .num {
+    font-size: 12px; color: var(--accent); letter-spacing: 1px; margin-bottom: 10px;
+  }
+
+  .case { display: grid; gap: 14px; }
+  .case-item {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px 26px;
+  }
+  .case-item h3 { font-size: 16px; font-weight: 500; margin-bottom: 6px; }
+  .case-item p { font-size: 14px; color: var(--muted); }
+  .case-item .tag {
+    display: inline-block; font-size: 12px; color: var(--accent);
+    background: var(--accent-soft); padding: 2px 10px; border-radius: 999px; margin-top: 12px;
+  }
+
+  .gb-form { display: grid; gap: 12px; }
+  .gb-form input, .gb-form textarea {
+    width: 100%; font: inherit; font-size: 14px; color: var(--text);
+    padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px;
+    background: #FDFDFC; outline: none; transition: border-color .15s;
+  }
+  .gb-form input:focus, .gb-form textarea:focus { border-color: var(--accent); }
+  .gb-form textarea { min-height: 110px; resize: vertical; }
+  .gb-form .hint { font-size: 12px; color: #9A9A94; }
+  .gb-form button {
+    justify-self: start; font: inherit; font-size: 14px; cursor: pointer;
+    padding: 11px 24px; border-radius: 10px; border: 1px solid var(--accent);
+    background: var(--accent); color: #fff; transition: .18s;
+  }
+  .gb-form button:hover { background: #0C5B47; }
+  .gb-form button:disabled { opacity: .55; cursor: not-allowed; }
+  .gb-msg {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 22px; margin-top: 12px;
+  }
+  .gb-msg .head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .gb-msg .who { font-size: 14px; font-weight: 500; }
+  .gb-msg .when { font-size: 12px; color: #9A9A94; }
+  .gb-msg .body { font-size: 14px; color: var(--text); margin-top: 8px; white-space: pre-wrap; word-break: break-word; }
+  .gb-status { font-size: 14px; margin-top: 12px; padding: 10px 14px; border-radius: 10px; display: none; }
+  .gb-status.ok { display: block; background: var(--accent-soft); color: var(--accent); }
+  .gb-status.err { display: block; background: #FDECEC; color: #B03A2E; }
+
+  .contact-list { display: grid; gap: 12px; }
+  .row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 15px 20px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px;
+  }
+  .row .k { font-size: 14px; color: var(--muted); }
+  .row .v { font-size: 14px; font-weight: 500; word-break: break-all; }
+
+  .chat-btn {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px; border-radius: 999px; border: none; cursor: pointer;
+    background: var(--accent); color: #fff; font-size: 14px; font-family: inherit;
+    box-shadow: 0 6px 18px rgba(15, 110, 86, .35); transition: .18s;
+  }
+  .chat-btn:hover { background: #0C5B47; transform: translateY(-2px); }
+  .chat-panel {
+    position: fixed; right: 22px; bottom: 78px; z-index: 70;
+    width: min(330px, calc(100vw - 32px)); height: min(470px, calc(100vh - 120px));
+    display: none; flex-direction: column; overflow: hidden;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.16);
+  }
+  .chat-panel.open { display: flex; }
+  .chat-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px; background: var(--accent); color: #fff; font-size: 14px;
+  }
+  .chat-head button {
+    background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; line-height: 1;
+  }
+  .chat-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: #FAFAF8; }
+  .chat-empty { text-align: center; font-size: 13px; color: #9A9A94; margin: auto; }
+  .chat-line { display: flex; flex-direction: column; max-width: 82%; }
+  .chat-line.me { align-self: flex-end; align-items: flex-end; }
+  .chat-line .bubble {
+    font-size: 14px; padding: 9px 13px; border-radius: 12px; white-space: pre-wrap; word-break: break-word;
+  }
+  .chat-line:not(.me) .bubble { background: #fff; border: 1px solid var(--line); border-top-left-radius: 4px; }
+  .chat-line.me .bubble { background: var(--accent); color: #fff; border-top-right-radius: 4px; }
+  .chat-line .bubble.hasimg { padding: 5px; background: #fff; }
+  .chat-line .bubble img { display: block; max-width: 220px; max-height: 220px; border-radius: 8px; cursor: zoom-in; }
+  .chat-line .cname { font-size: 11px; color: #9A9A94; margin-bottom: 3px; }
+  .chat-foot { border-top: 1px solid var(--line); padding: 10px; display: grid; gap: 8px; }
+  .chat-foot input {
+    width: 100%; font: inherit; font-size: 14px; padding: 9px 12px;
+    border: 1px solid var(--line); border-radius: 9px; background: #FDFDFC; outline: none;
+  }
+  .chat-foot .send-row { display: flex; gap: 8px; }
+  .chat-foot input[name=chatText] { flex: 1; }
+  .chat-foot button {
+    font: inherit; font-size: 13px; cursor: pointer; padding: 9px 16px;
+    border-radius: 9px; border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  .chat-foot button:disabled { opacity: .5; cursor: not-allowed; }
+  .chat-tip { font-size: 11px; color: #9A9A94; }
+
+  /* —— 社区聊天室 —— */
+  .cc-shell { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; min-height: 440px; }
+  .cc-side { width: 200px; flex-shrink: 0; border-right: 1px solid var(--line); display: flex; flex-direction: column; background: #FBFBF9; }
+  .cc-tabs { display: flex; border-bottom: 1px solid var(--line); }
+  .cc-tabs button { flex: 1; font: inherit; font-size: 13px; padding: 12px 0; border: none; background: none; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; }
+  .cc-tabs button.on { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+  .cc-list { flex: 1; overflow-y: auto; max-height: 400px; }
+  .cc-user { display: flex; align-items: center; gap: 8px; padding: 11px 14px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #F0F0EC; }
+  .cc-user:hover { background: #F3F6F4; }
+  .cc-user.on { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+  .cc-dot { width: 8px; height: 8px; border-radius: 50%; background: #C9C9C2; flex-shrink: 0; }
+  .cc-user.online .cc-dot { background: #22B573; }
+  .cc-user .u-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cc-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .cc-title { padding: 12px 16px; font-size: 14px; font-weight: 500; border-bottom: 1px solid var(--line); background: #fff; }
+  .cc-msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: #FAFAF8; min-height: 280px; max-height: 480px; }
+  .cc-foot { border-top: 1px solid var(--line); padding: 10px 12px; display: flex; gap: 8px; background: #fff; }
+  .cc-foot input { flex: 1; font: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; background: #FDFDFC; outline: none; }
+  .cc-foot input:focus { border-color: var(--accent); }
+  .cc-foot button { font: inherit; font-size: 13px; cursor: pointer; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+  .cc-foot button:disabled { opacity: .5; cursor: not-allowed; }
+  .cc-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; font-size: 13px; color: var(--muted); }
+  .cc-bar b { color: var(--text); font-weight: 500; }
+  .cc-bar .cc-link { color: var(--accent); cursor: pointer; }
+  .auth-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .auth-tabs button { font: inherit; font-size: 13px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: none; cursor: pointer; color: var(--muted); }
+  .auth-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .auth-form { display: grid; gap: 10px; max-width: 380px; }
+  .auth-form input { width: 100%; font: inherit; font-size: 14px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 10px; background: #FDFDFC; outline: none; }
+  .auth-form input:focus { border-color: var(--accent); }
+  .auth-form button[type=submit] { justify-self: start; font: inherit; font-size: 14px; cursor: pointer; padding: 10px 22px; border-radius: 10px; border: 1px solid var(--accent); background: var(--accent); color: #fff; }
+  .auth-form button[type=submit]:disabled { opacity: .55; cursor: not-allowed; }
+  .auth-status { font-size: 13px; padding: 8px 12px; border-radius: 9px; display: none; }
+  .auth-status.err { display: block; background: #FDECEC; color: #B03A2E; }
+  .auth-status.ok { display: block; background: var(--accent-soft); color: var(--accent); }
+  .auth-sub { font-size: 12px; color: #9A9A94; }
+  .auth-sub span { color: var(--accent); cursor: pointer; }
+
+  footer {
+    padding: 34px 0 56px; border-top: 1px solid var(--line);
+    font-size: 13px; color: #9A9A94; margin-top: 8px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+  @media (max-width: 560px) {
+    header { padding: 44px 0 32px; }
+    h1 { font-size: 27px; }
+    .nav nav { gap: 14px; }
+    .nav nav a:nth-child(3) { display: none; }
+    .row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <div class="logo">林小满</div>
+    <nav>
+      <a href="#about">关于我</a>
+      <a href="#services">我能提供</a>
+      <a href="#cases">合作案例</a>
+      <a href="#guestbook">留言板</a>
+      <a href="#chat">聊天室</a>
+      <a href="#contact">联系我</a>
+    </nav>
+  </div>
+
+  <header>
+    <div class="avatar">林</div>
+    <h1>林小满</h1>
+    <p class="tagline">做电商运营和私域增长。帮品牌把花钱买来的流量，变成会复购的人。</p>
+    <div class="chips">
+      <span class="chip">电商运营</span>
+      <span class="chip">私域增长</span>
+      <span class="chip">小红书投放</span>
+      <span class="chip">杭州</span>
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="#contact">加微信聊聊</a>
+      <a class="btn" href="#cases">看看我做过的项目</a>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="n">6 年</div><div class="l">电商运营经验</div></div>
+    <div class="stat"><div class="n">12 家</div><div class="l">深度合作品牌</div></div>
+    <div class="stat"><div class="n">8 万+</div><div class="l">累计私域好友</div></div>
+    <div class="stat"><div class="n">3.2 倍</div><div class="l">平均复购提升</div></div>
+  </div>
+
+  <section id="about">
+    <h2>关于我</h2>
+    <div class="card">
+      <p>6 年电商运营经验，做过服饰、食品、家居三个类目。前 3 年在品牌方做运营主管，负责天猫店和内容投放；后 3 年做独立顾问，帮中小品牌和连锁门店搭从获客到复购的完整链路。</p>
+      <p>我习惯先看数据再动手：接手一个项目，第一件事是把用户从进店到复购的每一步拆开，找到真正漏水的那一段。多数品牌的问题不在流量不够，而在来了留不住。</p>
+      <p>擅长的事：私域体系从 0 搭建、小红书内容与投放、会员复购机制设计、运营数据诊断。</p>
+    </div>
+  </section>
+
+  <section id="services">
+    <h2>我能提供</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="num">01</div>
+        <h3>私域复购体系搭建</h3>
+        <p>从加微信的话术、朋友圈节奏，到会员分层和复购券设计，做成一套能跑起来、店员照着做就行的流程。</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <h3>小红书内容与投放</h3>
+        <p>选题、笔记结构、达人筛选和投放预算分配。先小成本测出能跑的内容模型，再放大投放。</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <h3>运营数据诊断</h3>
+        <p>一次 2 小时的诊断会议，把店铺和私域的数据拉通看一遍，给出未来 90 天的行动清单。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cases">
+    <h2>合作案例</h2>
+    <div class="case">
+      <div class="case-item">
+        <h3>某连锁烘焙品牌 · 私域复购</h3>
+        <p>接手时线上只有外卖渠道，会员几乎无运营。重新设计会员分层和到店券机制后，3 个月内私域复购率从 11% 提升到 34%，单店月均订单从 600 单增长到 2100 单。</p>
+        <span class="tag">私域复购</span>
+      </div>
+      <div class="case-item">
+        <h3>某家居收纳品牌 · 小红书投放</h3>
+        <p>帮助品牌从 0 建立内容矩阵，用「场景化改造」选题替代产品参数说明，6 个月累计笔记曝光 480 万，单月投产比从 1.2 稳定到 2.8。</p>
+        <span class="tag">内容投放</span>
+      </div>
+      <div class="case-item">
+        <h3>某食品品牌 · 运营诊断</h3>
+        <p>诊断发现主要流失发生在「加购未付款」环节，调整详情页信息顺序和客服话术后，该环节转化率提升 42%，整体 ROI 提升 26%。</p>
+        <span class="tag">数据诊断</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="guestbook">
+    <h2>给我留言</h2>
+    <div class="card">
+      <form class="gb-form" id="gbForm">
+        <input type="text" id="gbName" maxlength="30" placeholder="怎么称呼你（选填）">
+        <input type="text" id="gbContact" maxlength="60" placeholder="联系方式：微信 / 邮箱 / 手机（选填，方便我回复你）">
+        <textarea id="gbContent" maxlength="500" placeholder="想聊合作、提问题，或者随便说点什么…" required></textarea>
+        <div class="hint">留言会先经过站长确认，通过后展示在下方留言墙上。</div>
+        <button type="submit" id="gbSubmit">提交留言</button>
+        <div class="gb-status" id="gbStatus"></div>
+      </form>
+    </div>
+    <div id="gbWall"></div>
+  </section>
+
+  <section id="chat">
+    <h2>社区聊天室</h2>
+
+    <div class="card" id="ccAuthCard">
+      <div class="auth-tabs">
+        <button type="button" data-av="otp" class="on">验证码登录</button>
+        <button type="button" data-av="pwd">密码登录</button>
+        <button type="button" data-av="reg">注册</button>
+      </div>
+
+      <form class="auth-form" id="ccFrmOtp">
+        <input type="email" id="ccOtpEmail" placeholder="邮箱" required>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="ccOtpCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
+          <button type="button" id="ccOtpSend">发送验证码</button>
+        </div>
+        <button type="submit">登录</button>
+        <div class="auth-sub">未注册的邮箱会自动创建账号 · 收不到验证码请检查垃圾邮件</div>
+        <div class="auth-status" id="ccStOtp"></div>
+      </form>
+
+      <form class="auth-form" id="ccFrmPwd" style="display:none">
+        <input type="email" id="ccPwdEmail" placeholder="邮箱" required>
+        <input type="password" id="ccPwdPass" placeholder="密码" required>
+        <button type="submit">登录</button>
+        <div class="auth-sub">忘记密码？<span id="ccToForgot">用邮箱验证码重置 →</span></div>
+        <div class="auth-status" id="ccStPwd"></div>
+      </form>
+
+      <form class="auth-form" id="ccFrmReg" style="display:none">
+        <input type="email" id="ccRegEmail" placeholder="邮箱" required>
+        <input type="password" id="ccRegPass" placeholder="设置密码（6 位以上）" minlength="6" required>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="ccRegCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
+          <button type="button" id="ccRegSend">发送验证码</button>
+        </div>
+        <button type="submit">注册并登录</button>
+        <div class="auth-sub">注册后以后可用密码登录 · 收不到验证码请检查垃圾邮件</div>
+        <div class="auth-status" id="ccStReg"></div>
+      </form>
+
+      <form class="auth-form" id="ccFrmForgot" style="display:none">
+        <input type="email" id="ccFgEmail" placeholder="注册邮箱" required>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="ccFgCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
+          <button type="button" id="ccFgSend">发送验证码</button>
+        </div>
+        <input type="password" id="ccFgPass" placeholder="新密码（6 位以上）" minlength="6" required>
+        <button type="submit">重置密码</button>
+        <div class="auth-sub"><span id="ccBackLogin">← 返回登录</span></div>
+        <div class="auth-status" id="ccStFg"></div>
+      </form>
+    </div>
+
+    <div id="ccApp" style="display:none">
+      <div class="cc-bar">
+        <span>当前身份：<b id="ccMe">—</b></span>
+        <span><span class="cc-link" id="ccRename">改昵称</span> · <span class="cc-link" id="ccLogout">退出登录</span></span>
+      </div>
+      <div class="cc-shell">
+        <div class="cc-side">
+          <div class="cc-tabs">
+            <button type="button" id="ccTabGroup" class="on">群聊大厅</button>
+            <button type="button" id="ccTabDm">私聊</button>
+          </div>
+          <div class="cc-list" id="ccList"></div>
+        </div>
+        <div class="cc-main">
+          <div class="cc-title" id="ccTitle">群聊大厅</div>
+          <div class="cc-msgs" id="ccMsgs"><div class="chat-empty">还没有消息，来说第一句吧。</div></div>
+          <div class="cc-foot">
+            <input type="text" id="ccText" maxlength="500" placeholder="输入消息，回车发送…">
+            <button type="button" id="ccSend">发送</button>
+          </div>
+        </div>
+      </div>
+      <div class="auth-sub" style="margin-top:10px">消息每 3 秒自动刷新 · 网页没有推送通知，保持页面打开才能实时收到新消息</div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>联系我</h2>
+    <div class="contact-list">
+      <div class="row"><span class="k">微信</span><span class="v">xiaoman-demo（加好友请备注来意）</span></div>
+      <div class="row"><span class="k">邮箱</span><span class="v">xiaoman@example.com</span></div>
+      <div class="row"><span class="k">小红书</span><span class="v">@林小满的运营笔记</span></div>
+      <div class="row"><span class="k">所在城市</span><span class="v">杭州 · 可远程协作</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2026 林小满</div>
+    <div>本页面为示例演示内容</div>
+  </footer>
+
+</div>
+
+<button class="chat-btn" id="chatBtn">💬 在线客服</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head"><span>在线客服 · 站长在线</span><button id="chatClose" title="收起">✕</button></div>
+  <div class="chat-body" id="chatBody"><div class="chat-empty">有任何问题，直接留言给我，我会尽快回复。</div></div>
+  <div class="chat-foot">
+    <input type="text" id="chatName" maxlength="30" placeholder="你的称呼（选填）">
+    <div class="send-row">
+      <input type="text" name="chatText" id="chatText" maxlength="500" placeholder="输入消息…">
+      <button type="button" id="chatImgBtn" title="发送图片" style="background:#fff;color:var(--accent);border:1px solid var(--line)">📷</button>
+      <button id="chatSend">发送</button>
+      <input type="file" id="chatFile" accept="image/jpeg,image/png,image/webp" style="display:none">
+    </div>
+    <div class="chat-tip">关闭窗口后重新打开，聊天记录还在。</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script>
+  const publicConfig = {
+    endpoint: "https://desktop-clock-pwa.app.workbuddy.host",
+    publishableKey: "wbpk_PoNEnNcWnQ5GZlkZhbjWQu_ZxwjuVtK7pHtvYv5AD11qtp511gSSEpB",
+  };
+  const cloud = WorkBuddyCloud.createWorkBuddyCloud({
+    endpoint: publicConfig.endpoint,
+    publishableKey: publicConfig.publishableKey,
+  });
+  const db = cloud.database;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    if (isNaN(d)) return "";
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function showStatus(type, text) {
+    const el = $("gbStatus");
+    el.className = "gb-status " + type;
+    el.textContent = text;
+  }
+
+  async function loadWall() {
+    const { data, error } = await db.from("guestbook_messages")
+      .select("id, name, content, created_at")
+      .order("created_at", { ascending: false })
+      .limit(20);
+    const wall = $("gbWall");
+    if (error) return; // 留言墙加载失败不打断页面
+    if (!data || data.length === 0) {
+      wall.innerHTML = '<p style="font-size:13px;color:#9A9A94;margin-top:16px">还没有留言，来做第一个吧。</p>';
+      return;
+    }
+    wall.innerHTML = data.map((m) => (
+      '<div class="gb-msg"><div class="head">' +
+      '<span class="who">' + esc(m.name || "匿名朋友") + "</span>" +
+      '<span class="when">' + fmtTime(m.created_at) + "</span></div>" +
+      '<div class="body">' + esc(m.content) + "</div></div>"
+    )).join("");
+  }
+
+  $("gbForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const content = $("gbContent").value.trim();
+    if (!content) return;
+    const btn = $("gbSubmit");
+    btn.disabled = true;
+    btn.textContent = "提交中…";
+    const { error } = await db.from("guestbook_messages").insert({
+      name: $("gbName").value.trim() || null,
+      contact: $("gbContact").value.trim() || null,
+      content: content,
+    });
+    btn.disabled = false;
+    btn.textContent = "提交留言";
+    if (error) {
+      showStatus("err", "提交失败了，请稍后再试一次。");
+      return;
+    }
+    $("gbForm").reset();
+    showStatus("ok", "留言已收到，确认通过后会显示在下方，谢谢！");
+  });
+
+  loadWall();
+
+  // —— 在线客服 ——
+  let chatConv = localStorage.getItem("chat_conv_id");
+  if (!chatConv || !/^[A-Za-z0-9_-]{16,64}$/.test(chatConv)) {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    chatConv = Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
+    localStorage.setItem("chat_conv_id", chatConv);
+  }
+  const savedName = localStorage.getItem("chat_name");
+  if (savedName) $("chatName").value = savedName;
+
+  let chatLastId = 0;
+  let chatTimer = null;
+
+  function renderLine(m) {
+    const me = m.sender === "visitor";
+    let inner = "";
+    if (m.image) {
+      const src = m.image.startsWith("data:") ? m.image : "data:image/jpeg;base64," + m.image;
+      inner += '<span class="bubble hasimg"><img src="' + src + '" alt="图片" onclick="window.open(this.src)"></span>';
+    }
+    if (m.content) inner += '<span class="bubble">' + esc(m.content) + "</span>";
+    if (!inner) return "";
+    return '<div class="chat-line' + (me ? " me" : "") + '" style="gap:4px">' +
+      '<span class="cname">' + esc(me ? (m.sender_name || "我") : "站长") + "</span>" + inner + "</div>";
+  }
+
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return reject(new Error("仅支持 JPG / PNG / WebP 图片"));
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const max = 1280;
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if (w > max || h > max) {
+          const r = Math.min(max / w, max / h);
+          w = Math.round(w * r); h = Math.round(h * r);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg", 0.72));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("图片读取失败")); };
+      img.src = url;
+    });
+  }
+
+  $("chatImgBtn").addEventListener("click", () => $("chatFile").click());
+  $("chatFile").addEventListener("change", async () => {
+    const file = $("chatFile").files[0];
+    $("chatFile").value = "";
+    if (!file) return;
+    const btn = $("chatImgBtn");
+    btn.disabled = true;
+    btn.textContent = "发送中…";
+    try {
+      const dataUrl = await compressImage(file);
+      if (dataUrl.length > 280000) {
+        alert("图片太大了，换一张小一点的试试");
+        return;
+      }
+      const { error } = await cloud.database.rpc("chat_send_img", {
+        p_conv_id: chatConv,
+        p_name: $("chatName").value.trim(),
+        p_image: dataUrl,
+        p_content: $("chatText").value.trim(),
+      });
+      if (error) alert("图片发送失败，请重试");
+      else { $("chatText").value = ""; await chatPoll(); }
+    } catch (e) {
+      alert(e.message || "图片处理失败");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "📷";
+    }
+  });
+
+  async function chatPoll() {
+    const { data, error } = await cloud.database.rpc("chat_pull", { p_conv_id: chatConv, p_after_id: chatLastId });
+    if (error || !data || data.length === 0) return;
+    const body = $("chatBody");
+    const empty = body.querySelector(".chat-empty");
+    if (empty) empty.remove();
+    const nearBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 60;
+    data.forEach((m) => { body.insertAdjacentHTML("beforeend", renderLine(m)); chatLastId = Math.max(chatLastId, m.id); });
+    if (nearBottom || data[data.length - 1].sender === "visitor") body.scrollTop = body.scrollHeight;
+  }
+
+  function chatOpen() {
+    $("chatPanel").classList.add("open");
+    $("chatBtn").style.display = "none";
+    if (chatLastId === 0) {
+      chatPoll().then(() => { $("chatBody").scrollTop = $("chatBody").scrollHeight; });
+    }
+    if (!chatTimer) chatTimer = setInterval(chatPoll, 3000);
+    $("chatText").focus();
+  }
+  function chatClose() {
+    $("chatPanel").classList.remove("open");
+    $("chatBtn").style.display = "flex";
+    if (chatTimer) { clearInterval(chatTimer); chatTimer = null; }
+  }
+
+  $("chatBtn").addEventListener("click", chatOpen);
+  $("chatClose").addEventListener("click", chatClose);
+
+  async function chatSubmit() {
+    const text = $("chatText").value.trim();
+    if (!text) return;
+    const btn = $("chatSend");
+    btn.disabled = true;
+    const name = $("chatName").value.trim();
+    localStorage.setItem("chat_name", name);
+    const { error } = await cloud.database.rpc("chat_send", { p_conv_id: chatConv, p_name: name, p_content: text });
+    btn.disabled = false;
+    if (error) return;
+    $("chatText").value = "";
+    await chatPoll();
+  }
+  $("chatSend").addEventListener("click", chatSubmit);
+  $("chatText").addEventListener("keydown", (e) => { if (e.key === "Enter") chatSubmit(); });
+
+  // ==================== 社区聊天室 ====================
+  const CC = { user: null, uid: null, nick: "", mode: "group", peer: null,
+    groupLast: 0, dmLast: {}, timer: null, hbTimer: null, users: [], flows: { otp: null, reg: null, fg: null } };
+
+  const ccSt = (id, type, text) => { const el = $(id); el.className = "auth-status " + type; el.textContent = text; };
+  const ccKey = (a, b) => [a, b].sort().join("_");
+  function ccCooldown(btn) {
+    btn.disabled = true;
+    const t0 = btn.textContent; let s = 60;
+    btn.textContent = s + "s";
+    const iv = setInterval(() => { s--; if (s <= 0) { clearInterval(iv); btn.disabled = false; btn.textContent = t0; } else btn.textContent = s + "s"; }, 1000);
+  }
+
+  function authView(name) {
+    ["otp", "pwd", "reg", "forgot"].forEach((k) => { $("ccFrm" + k.charAt(0).toUpperCase() + k.slice(1)).style.display = (k === name) ? "grid" : "none"; });
+    document.querySelectorAll(".auth-tabs button").forEach((b) => b.classList.toggle("on", b.dataset.av === name));
+  }
+  document.querySelectorAll(".auth-tabs button").forEach((b) => b.addEventListener("click", () => authView(b.dataset.av)));
+  $("ccToForgot").addEventListener("click", () => authView("forgot"));
+  $("ccBackLogin").addEventListener("click", () => authView("pwd"));
+
+  // —— 验证码登录 ——
+  $("ccOtpSend").addEventListener("click", async () => {
+    const email = $("ccOtpEmail").value.trim();
+    if (!email) return ccSt("ccStOtp", "err", "请先填写邮箱");
+    const btn = $("ccOtpSend");
+    const r = await cloud.auth.signInWithOtp({ email });
+    if (r.error) return ccSt("ccStOtp", "err", "发送失败：" + (r.error.message || "请稍后再试"));
+    CC.flows.otp = r.data;
+    ccCooldown(btn);
+    ccSt("ccStOtp", "ok", "验证码已发送，请查收邮件（注意垃圾邮件）。");
+  });
+  $("ccFrmOtp").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!CC.flows.otp) return ccSt("ccStOtp", "err", "请先点「发送验证码」");
+    const done = await CC.flows.otp.verify({ token: $("ccOtpCode").value.trim() });
+    if (done.error) return ccSt("ccStOtp", "err", "验证码不正确或已过期");
+    CC.flows.otp = null;
+    const ses = await cloud.auth.getSession();
+    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+  });
+
+  // —— 密码登录 ——
+  $("ccFrmPwd").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const r = await cloud.auth.signInWithPassword({ email: $("ccPwdEmail").value.trim(), password: $("ccPwdPass").value });
+    if (r.error) return ccSt("ccStPwd", "err", "邮箱或密码不正确");
+    await ccEnter(r.data.user);
+  });
+
+  // —— 注册 ——
+  $("ccRegSend").addEventListener("click", async () => {
+    const email = $("ccRegEmail").value.trim();
+    if (!email) return ccSt("ccStReg", "err", "请先填写邮箱");
+    const r = await cloud.auth.sendOtp({ email });
+    if (r.error) return ccSt("ccStReg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
+    CC.flows.reg = r.data;
+    ccCooldown($("ccRegSend"));
+    ccSt("ccStReg", "ok", "验证码已发送，请查收邮件。");
+  });
+  $("ccFrmReg").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = $("ccRegEmail").value.trim();
+    const pwd = $("ccRegPass").value;
+    if (!CC.flows.reg) {
+      const r = await cloud.auth.sendOtp({ email });
+      if (r.error) return ccSt("ccStReg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
+      CC.flows.reg = r.data;
+      ccCooldown($("ccRegSend"));
+      return ccSt("ccStReg", "ok", "验证码已发送，填写后点「注册并登录」。");
+    }
+    const done = await cloud.auth.verifyOtp({
+      verificationId: CC.flows.reg.verificationId,
+      token: $("ccRegCode").value.trim(),
+      email: email,
+      isExistingUser: CC.flows.reg.isExistingUser,
+      password: CC.flows.reg.isExistingUser ? undefined : pwd,
+    });
+    if (done.error) return ccSt("ccStReg", "err", "验证码不正确或已过期");
+    if (CC.flows.reg.isExistingUser) {
+      CC.flows.reg = null;
+      return ccSt("ccStReg", "ok", "该邮箱已有账号，请切换到「验证码登录」或「密码登录」。");
+    }
+    CC.flows.reg = null;
+    const ses = await cloud.auth.getSession();
+    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+  });
+
+  // —— 忘记密码 ——
+  $("ccFgSend").addEventListener("click", async () => {
+    const email = $("ccFgEmail").value.trim();
+    if (!email) return ccSt("ccStFg", "err", "请先填写注册邮箱");
+    const r = await cloud.auth.resetPasswordForEmail(email);
+    if (r.error) return ccSt("ccStFg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
+    CC.flows.fg = r.data;
+    ccCooldown($("ccFgSend"));
+    ccSt("ccStFg", "ok", "验证码已发送，请查收邮件。");
+  });
+  $("ccFrmForgot").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!CC.flows.fg) return ccSt("ccStFg", "err", "请先点「发送验证码」");
+    const done = await CC.flows.fg.updateUser({ nonce: $("ccFgCode").value.trim(), password: $("ccFgPass").value });
+    if (done.error) return ccSt("ccStFg", "err", "重置失败，请核对验证码");
+    CC.flows.fg = null;
+    const ses = await cloud.auth.getSession();
+    if (ses.data && ses.data.user) { await ccEnter(ses.data.user); return; }
+    authView("pwd");
+    ccSt("ccStPwd", "ok", "密码已重置，请用新密码登录。");
+  });
+
+  // —— 进入聊天室 ——
+  async function ccEnter(user) {
+    CC.user = user; CC.uid = user.id;
+    let { data: prof } = await db.from("chat_profiles").select("*").eq("id", CC.uid).maybeSingle();
+    if (!prof) {
+      const def = (user.email || "用户").split("@")[0].replace(/[^A-Za-z0-9\u4e00-\u9fa5_-]/g, "").slice(0, 20) || "用户";
+      const nick = ((prompt("给自己起一个昵称（在聊天室中显示）", def) || "").trim() || def).slice(0, 30);
+      const ins = await db.from("chat_profiles").insert({ nickname: nick }).select().single();
+      prof = ins.data || { id: CC.uid, nickname: nick };
+    }
+    CC.nick = prof.nickname;
+    $("ccMe").textContent = CC.nick + "（" + (user.email || "") + "）";
+    $("ccAuthCard").style.display = "none";
+    $("ccApp").style.display = "block";
+    await ccLoadUsers();
+    await ccLoadGroupHist();
+    db.rpc("chat_heartbeat");
+    if (!CC.timer) CC.timer = setInterval(ccPoll, 3000);
+    if (!CC.hbTimer) CC.hbTimer = setInterval(() => { db.rpc("chat_heartbeat"); ccLoadUsers(); }, 60000);
+  }
+
+  function ccReset() {
+    clearInterval(CC.timer); clearInterval(CC.hbTimer);
+    CC.timer = CC.hbTimer = null;
+    CC.user = null; CC.uid = null; CC.nick = ""; CC.mode = "group"; CC.peer = null;
+    CC.groupLast = 0; CC.dmLast = {}; CC.users = [];
+    $("ccApp").style.display = "none";
+    $("ccAuthCard").style.display = "block";
+    authView("otp");
+    $("ccMsgs").innerHTML = '<div class="chat-empty">还没有消息，来说第一句吧。</div>';
+    $("ccList").innerHTML = "";
+    $("ccTitle").textContent = "群聊大厅";
+    $("ccTabGroup").classList.add("on"); $("ccTabDm").classList.remove("on");
+  }
+
+  // —— 用户列表 ——
+  async function ccLoadUsers() {
+    const { data } = await db.from("chat_profiles")
+      .select("id, nickname, last_seen").neq("id", CC.uid)
+      .order("last_seen", { ascending: false }).limit(100);
+    if (data) { CC.users = data; ccRenderList(); }
+  }
+  function ccRenderList() {
+    const el = $("ccList");
+    const now = Date.now();
+    el.innerHTML = (CC.users || []).map((u) => {
+      const on = now - new Date(u.last_seen).getTime() < 3 * 60 * 1000;
+      const sel = CC.mode === "dm" && CC.peer === u.id;
+      return '<div class="cc-user' + (on ? " online" : "") + (sel ? " on" : "") + '" data-uid="' + esc(u.id) + '">' +
+        '<span class="cc-dot"></span><span class="u-name">' + esc(u.nickname) + "</span>" +
+        '<span style="font-size:11px;color:#9A9A94">' + (on ? "在线" : "") + "</span></div>";
+    }).join("") || '<div class="chat-empty" style="padding:20px;font-size:12px">还没有其他用户，等第一位伙伴注册吧。</div>';
+    el.querySelectorAll(".cc-user").forEach((n) => n.addEventListener("click", () => ccOpenDm(n.dataset.uid)));
+  }
+
+  // —— 群聊 ——
+  async function ccLoadGroupHist() {
+    const { data } = await db.from("chat_group_messages").select("*").order("id", { ascending: false }).limit(50);
+    const msgs = (data || []).reverse();
+    $("ccMsgs").innerHTML = '<div class="chat-empty">还没有消息，来说第一句吧。</div>';
+    msgs.forEach(ccLine);
+    CC.groupLast = msgs.length ? msgs[msgs.length - 1].id : 0;
+    if (msgs.length) $("ccMsgs").scrollTop = $("ccMsgs").scrollHeight;
+  }
+
+  // —— 私聊 ——
+  async function ccOpenDm(uid) {
+    const u = (CC.users || []).find((x) => x.id === uid);
+    if (!u) return;
+    CC.mode = "dm"; CC.peer = uid;
+    $("ccTabGroup").classList.remove("on"); $("ccTabDm").classList.add("on");
+    $("ccTitle").textContent = "与 " + u.nickname + " 私聊";
+    $("ccMsgs").innerHTML = '<div class="chat-empty">暂时没有消息，打个招呼吧。</div>';
+    ccRenderList();
+    const { data } = await db.from("chat_dm_messages").select("*")
+      .eq("conv_key", ccKey(CC.uid, uid)).order("id", { ascending: false }).limit(50);
+    const msgs = (data || []).reverse();
+    CC.dmLast[uid] = msgs.length ? msgs[msgs.length - 1].id : 0;
+    msgs.forEach(ccLine);
+    if (msgs.length) $("ccMsgs").scrollTop = $("ccMsgs").scrollHeight;
+  }
+
+  $("ccTabGroup").addEventListener("click", () => {
+    CC.mode = "group"; CC.peer = null;
+    $("ccTabGroup").classList.add("on"); $("ccTabDm").classList.remove("on");
+    $("ccTitle").textContent = "群聊大厅";
+    ccRenderList();
+    ccLoadGroupHist();
+  });
+  $("ccTabDm").addEventListener("click", () => {
+    CC.mode = "dm";
+    $("ccTabGroup").classList.remove("on"); $("ccTabDm").classList.add("on");
+    if (!CC.peer) {
+      $("ccTitle").textContent = "私聊 · 从左侧选择一个用户";
+      $("ccMsgs").innerHTML = '<div class="chat-empty">从左侧选择一个用户，开始一对一私聊。</div>';
+    }
+    ccRenderList();
+  });
+
+  // —— 消息渲染与轮询 ——
+  function ccLine(m) {
+    const me = m.sender_id === CC.uid;
+    const body = $("ccMsgs");
+    const empty = body.querySelector(".chat-empty");
+    if (empty) empty.remove();
+    const nearBottom = body.scrollHeight - body.scrollTop - body.clientHeight < 60;
+    body.insertAdjacentHTML("beforeend",
+      '<div class="chat-line' + (me ? " me" : "") + '">' +
+      '<span class="cname">' + esc(me ? CC.nick : (m.nickname || "用户")) + "</span>" +
+      '<span class="bubble">' + esc(m.content) + "</span></div>");
+    if (nearBottom || me) body.scrollTop = body.scrollHeight;
+  }
+
+  async function ccPoll() {
+    if (!CC.uid) return;
+    if (CC.mode === "group") {
+      const { data } = await db.from("chat_group_messages").select("*")
+        .gt("id", CC.groupLast).order("id", { ascending: true }).limit(100);
+      if (data && data.length) {
+        data.forEach(ccLine);
+        CC.groupLast = data[data.length - 1].id;
+      }
+    } else if (CC.peer) {
+      const { data } = await db.from("chat_dm_messages").select("*")
+        .eq("conv_key", ccKey(CC.uid, CC.peer))
+        .gt("id", CC.dmLast[CC.peer] || 0).order("id", { ascending: true }).limit(100);
+      if (data && data.length) {
+        data.forEach(ccLine);
+        CC.dmLast[CC.peer] = data[data.length - 1].id;
+      }
+    }
+  }
+
+  // —— 发送 ——
+  async function ccSubmit() {
+    const text = $("ccText").value.trim();
+    if (!text || !CC.uid) return;
+    $("ccSend").disabled = true;
+    let err = null;
+    if (CC.mode === "group") {
+      const r = await db.from("chat_group_messages").insert({ nickname: CC.nick, content: text });
+      err = r.error;
+    } else if (CC.peer) {
+      const r = await db.from("chat_dm_messages").insert({ conv_key: ccKey(CC.uid, CC.peer), content: text });
+      err = r.error;
+    }
+    $("ccSend").disabled = false;
+    if (err) { alert("发送失败，请检查登录状态后重试"); return; }
+    $("ccText").value = "";
+    ccPoll();
+  }
+  $("ccSend").addEventListener("click", ccSubmit);
+  $("ccText").addEventListener("keydown", (e) => { if (e.key === "Enter") ccSubmit(); });
+
+  // —— 昵称 / 退出 ——
+  $("ccRename").addEventListener("click", async () => {
+    const nick = prompt("新的昵称", CC.nick) || "";
+    const v = nick.trim().slice(0, 30);
+    if (!v || v === CC.nick) return;
+    const { error } = await db.from("chat_profiles").update({ nickname: v }).eq("id", CC.uid);
+    if (error) return alert("修改失败，请稍后再试");
+    CC.nick = v;
+    $("ccMe").textContent = CC.nick + "（" + ((CC.user && CC.user.email) || "") + "）";
+    ccLoadUsers();
+  });
+  $("ccLogout").addEventListener("click", async () => { await cloud.auth.signOut(); });
+
+  // —— 启动 ——
+  (async () => {
+    const ses = await cloud.auth.getSession();
+    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+  })();
+  cloud.auth.onAuthStateChange((event) => { if (event === "SIGNED_OUT") ccReset(); });
+</script>
+</body>
+</html>
