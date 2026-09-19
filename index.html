@@ -336,19 +336,15 @@
 
     <div class="card" id="ccAuthCard">
       <div class="auth-tabs">
-        <button type="button" data-av="otp" class="on">验证码登录</button>
+        <button type="button" data-av="otp" class="on">链接登录</button>
         <button type="button" data-av="pwd">密码登录</button>
         <button type="button" data-av="reg">注册</button>
       </div>
 
       <form class="auth-form" id="ccFrmOtp">
         <input type="email" id="ccOtpEmail" placeholder="邮箱" required>
-        <div style="display:flex;gap:8px">
-          <input type="text" id="ccOtpCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
-          <button type="button" id="ccOtpSend">发送验证码</button>
-        </div>
-        <button type="submit">登录</button>
-        <div class="auth-sub">未注册的邮箱会自动创建账号 · 收不到验证码请检查垃圾邮件</div>
+        <button type="submit" id="ccOtpSend">发送登录链接</button>
+        <div class="auth-sub">仅限已注册邮箱 · 点击邮件里的链接即可免密码直接登录</div>
         <div class="auth-status" id="ccStOtp"></div>
       </form>
 
@@ -363,23 +359,17 @@
       <form class="auth-form" id="ccFrmReg" style="display:none">
         <input type="email" id="ccRegEmail" placeholder="邮箱" required>
         <input type="password" id="ccRegPass" placeholder="设置密码（6 位以上）" minlength="6" required>
-        <div style="display:flex;gap:8px">
-          <input type="text" id="ccRegCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
-          <button type="button" id="ccRegSend">发送验证码</button>
-        </div>
         <button type="submit">注册并登录</button>
-        <div class="auth-sub">注册后以后可用密码登录 · 收不到验证码请检查垃圾邮件</div>
+        <div class="auth-sub">注册成功后即可直接进入聊天室，之后可用密码登录</div>
         <div class="auth-status" id="ccStReg"></div>
       </form>
 
       <form class="auth-form" id="ccFrmForgot" style="display:none">
         <input type="email" id="ccFgEmail" placeholder="注册邮箱" required>
-        <div style="display:flex;gap:8px">
-          <input type="text" id="ccFgCode" placeholder="邮箱验证码" style="flex:1" maxlength="8" required>
-          <button type="button" id="ccFgSend">发送验证码</button>
-        </div>
-        <input type="password" id="ccFgPass" placeholder="新密码（6 位以上）" minlength="6" required>
-        <button type="submit">重置密码</button>
+        <button type="button" id="ccFgSend">发送重置链接</button>
+        <input type="password" id="ccFgPass" placeholder="设置新密码（6 位以上）" minlength="6" style="display:none" required>
+        <button type="submit" id="ccFgSubmit" style="display:none">保存新密码</button>
+        <div class="auth-sub">点击邮件里的重置链接后，回到本页即可设置新密码</div>
         <div class="auth-sub"><span id="ccBackLogin">← 返回登录</span></div>
         <div class="auth-status" id="ccStFg"></div>
       </form>
@@ -444,17 +434,12 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const publicConfig = {
-    endpoint: "https://desktop-clock-pwa.app.workbuddy.host",
-    publishableKey: "wbpk_PoNEnNcWnQ5GZlkZhbjWQu_ZxwjuVtK7pHtvYv5AD11qtp511gSSEpB",
-  };
-  const cloud = WorkBuddyCloud.createWorkBuddyCloud({
-    endpoint: publicConfig.endpoint,
-    publishableKey: publicConfig.publishableKey,
-  });
-  const db = cloud.database;
+  const SUPABASE_URL = "https://bbsdqtxxxcfymxnmlfkb.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_0FPyxY2UFV8e7W3Ff9nPyg_qE2eTWH9";
+  const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const db = supa;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -577,7 +562,7 @@
         alert("图片太大了，换一张小一点的试试");
         return;
       }
-      const { error } = await cloud.database.rpc("chat_send_img", {
+      const { error } = await db.rpc("chat_send_img", {
         p_conv_id: chatConv,
         p_name: $("chatName").value.trim(),
         p_image: dataUrl,
@@ -594,7 +579,7 @@
   });
 
   async function chatPoll() {
-    const { data, error } = await cloud.database.rpc("chat_pull", { p_conv_id: chatConv, p_after_id: chatLastId });
+    const { data, error } = await db.rpc("chat_pull", { p_conv_id: chatConv, p_after_id: chatLastId });
     if (error || !data || data.length === 0) return;
     const body = $("chatBody");
     const empty = body.querySelector(".chat-empty");
@@ -629,7 +614,7 @@
     btn.disabled = true;
     const name = $("chatName").value.trim();
     localStorage.setItem("chat_name", name);
-    const { error } = await cloud.database.rpc("chat_send", { p_conv_id: chatConv, p_name: name, p_content: text });
+    const { error } = await db.rpc("chat_send", { p_conv_id: chatConv, p_name: name, p_content: text });
     btn.disabled = false;
     if (error) return;
     $("chatText").value = "";
@@ -640,7 +625,7 @@
 
   // ==================== 社区聊天室 ====================
   const CC = { user: null, uid: null, nick: "", mode: "group", peer: null,
-    groupLast: 0, dmLast: {}, timer: null, hbTimer: null, users: [], flows: { otp: null, reg: null, fg: null } };
+    groupLast: 0, dmLast: {}, timer: null, hbTimer: null, users: [], otpEmail: null, fgEmail: null };
 
   const ccSt = (id, type, text) => { const el = $(id); el.className = "auth-status " + type; el.textContent = text; };
   const ccKey = (a, b) => [a, b].sort().join("_");
@@ -659,93 +644,58 @@
   $("ccToForgot").addEventListener("click", () => authView("forgot"));
   $("ccBackLogin").addEventListener("click", () => authView("pwd"));
 
-  // —— 验证码登录 ——
-  $("ccOtpSend").addEventListener("click", async () => {
+  // —— 邮箱链接登录（Magic Link）——
+  $("ccFrmOtp").addEventListener("submit", async (e) => {
+    e.preventDefault();
     const email = $("ccOtpEmail").value.trim();
     if (!email) return ccSt("ccStOtp", "err", "请先填写邮箱");
     const btn = $("ccOtpSend");
-    const r = await cloud.auth.signInWithOtp({ email });
+    const r = await supa.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
     if (r.error) return ccSt("ccStOtp", "err", "发送失败：" + (r.error.message || "请稍后再试"));
-    CC.flows.otp = r.data;
     ccCooldown(btn);
-    ccSt("ccStOtp", "ok", "验证码已发送，请查收邮件（注意垃圾邮件）。");
-  });
-  $("ccFrmOtp").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    if (!CC.flows.otp) return ccSt("ccStOtp", "err", "请先点「发送验证码」");
-    const done = await CC.flows.otp.verify({ token: $("ccOtpCode").value.trim() });
-    if (done.error) return ccSt("ccStOtp", "err", "验证码不正确或已过期");
-    CC.flows.otp = null;
-    const ses = await cloud.auth.getSession();
-    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+    ccSt("ccStOtp", "ok", "登录链接已发送，请到邮箱点击该链接，本页会自动登录。");
   });
 
   // —— 密码登录 ——
   $("ccFrmPwd").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const r = await cloud.auth.signInWithPassword({ email: $("ccPwdEmail").value.trim(), password: $("ccPwdPass").value });
+    const r = await supa.auth.signInWithPassword({ email: $("ccPwdEmail").value.trim(), password: $("ccPwdPass").value });
     if (r.error) return ccSt("ccStPwd", "err", "邮箱或密码不正确");
     await ccEnter(r.data.user);
   });
 
   // —— 注册 ——
-  $("ccRegSend").addEventListener("click", async () => {
-    const email = $("ccRegEmail").value.trim();
-    if (!email) return ccSt("ccStReg", "err", "请先填写邮箱");
-    const r = await cloud.auth.sendOtp({ email });
-    if (r.error) return ccSt("ccStReg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
-    CC.flows.reg = r.data;
-    ccCooldown($("ccRegSend"));
-    ccSt("ccStReg", "ok", "验证码已发送，请查收邮件。");
-  });
   $("ccFrmReg").addEventListener("submit", async (e) => {
     e.preventDefault();
     const email = $("ccRegEmail").value.trim();
     const pwd = $("ccRegPass").value;
-    if (!CC.flows.reg) {
-      const r = await cloud.auth.sendOtp({ email });
-      if (r.error) return ccSt("ccStReg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
-      CC.flows.reg = r.data;
-      ccCooldown($("ccRegSend"));
-      return ccSt("ccStReg", "ok", "验证码已发送，填写后点「注册并登录」。");
-    }
-    const done = await cloud.auth.verifyOtp({
-      verificationId: CC.flows.reg.verificationId,
-      token: $("ccRegCode").value.trim(),
-      email: email,
-      isExistingUser: CC.flows.reg.isExistingUser,
-      password: CC.flows.reg.isExistingUser ? undefined : pwd,
-    });
-    if (done.error) return ccSt("ccStReg", "err", "验证码不正确或已过期");
-    if (CC.flows.reg.isExistingUser) {
-      CC.flows.reg = null;
-      return ccSt("ccStReg", "ok", "该邮箱已有账号，请切换到「验证码登录」或「密码登录」。");
-    }
-    CC.flows.reg = null;
-    const ses = await cloud.auth.getSession();
-    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+    if (!email || pwd.length < 6) return ccSt("ccStReg", "err", "请填写邮箱，密码至少 6 位");
+    const r = await supa.auth.signUp({ email, password: pwd });
+    if (r.error) return ccSt("ccStReg", "err", "注册失败：" + (r.error.message || "请稍后再试"));
+    if (r.data.session && r.data.session.user) { await ccEnter(r.data.session.user); return; }
+    ccSt("ccStReg", "ok", "注册成功！请到邮箱点击确认链接，然后用密码登录。");
   });
 
-  // —— 忘记密码 ——
+  // —— 忘记密码：发重置链接，点链接回来后设置新密码 ——
+  let fgResetMode = false;
   $("ccFgSend").addEventListener("click", async () => {
     const email = $("ccFgEmail").value.trim();
     if (!email) return ccSt("ccStFg", "err", "请先填写注册邮箱");
-    const r = await cloud.auth.resetPasswordForEmail(email);
+    const r = await supa.auth.resetPasswordForEmail(email);
     if (r.error) return ccSt("ccStFg", "err", "发送失败：" + (r.error.message || "请稍后再试"));
-    CC.flows.fg = r.data;
     ccCooldown($("ccFgSend"));
-    ccSt("ccStFg", "ok", "验证码已发送，请查收邮件。");
+    ccSt("ccStFg", "ok", "重置链接已发送，请到邮箱点击该链接，然后回本页设置新密码。");
   });
   $("ccFrmForgot").addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!CC.flows.fg) return ccSt("ccStFg", "err", "请先点「发送验证码」");
-    const done = await CC.flows.fg.updateUser({ nonce: $("ccFgCode").value.trim(), password: $("ccFgPass").value });
-    if (done.error) return ccSt("ccStFg", "err", "重置失败，请核对验证码");
-    CC.flows.fg = null;
-    const ses = await cloud.auth.getSession();
-    if (ses.data && ses.data.user) { await ccEnter(ses.data.user); return; }
-    authView("pwd");
-    ccSt("ccStPwd", "ok", "密码已重置，请用新密码登录。");
+    if (!fgResetMode) return;
+    const pwd = $("ccFgPass").value;
+    if (pwd.length < 6) return ccSt("ccStFg", "err", "密码至少 6 位");
+    const up = await supa.auth.updateUser({ password: pwd });
+    if (up.error) return ccSt("ccStFg", "err", "设置失败，请稍后再试");
+    ccSt("ccStFg", "ok", "新密码已保存！");
+    const ses = await supa.auth.getSession();
+    if (ses.data && ses.data.session && ses.data.session.user) await ccEnter(ses.data.session.user);
   });
 
   // —— 进入聊天室 ——
@@ -913,14 +863,26 @@
     $("ccMe").textContent = CC.nick + "（" + ((CC.user && CC.user.email) || "") + "）";
     ccLoadUsers();
   });
-  $("ccLogout").addEventListener("click", async () => { await cloud.auth.signOut(); });
+  $("ccLogout").addEventListener("click", async () => { await supa.auth.signOut(); });
 
   // —— 启动 ——
   (async () => {
-    const ses = await cloud.auth.getSession();
-    if (ses.data && ses.data.user) await ccEnter(ses.data.user);
+    const ses = await supa.auth.getSession();
+    if (ses.data && ses.data.session && ses.data.session.user) await ccEnter(ses.data.session.user);
   })();
-  cloud.auth.onAuthStateChange((event) => { if (event === "SIGNED_OUT") ccReset(); });
+  supa.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN" && session && session.user && !CC.uid) ccEnter(session.user);
+    if (event === "SIGNED_OUT") ccReset();
+    if (event === "PASSWORD_RECOVERY") {
+      fgResetMode = true;
+      authView("forgot");
+      $("ccFgEmail").style.display = "none";
+      $("ccFgSend").style.display = "none";
+      $("ccFgPass").style.display = "";
+      $("ccFgSubmit").style.display = "";
+      ccSt("ccStFg", "ok", "身份已验证，请直接设置新密码。");
+    }
+  });
 </script>
 </body>
 </html>
