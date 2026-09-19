@@ -154,17 +154,12 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const publicConfig = {
-    endpoint: "https://desktop-clock-pwa.app.workbuddy.host",
-    publishableKey: "wbpk_PoNEnNcWnQ5GZlkZhbjWQu_ZxwjuVtK7pHtvYv5AD11qtp511gSSEpB",
-  };
-  const cloud = WorkBuddyCloud.createWorkBuddyCloud({
-    endpoint: publicConfig.endpoint,
-    publishableKey: publicConfig.publishableKey,
-  });
-  const db = cloud.database;
+  const SUPABASE_URL = "https://bbsdqtxxxcfymxnmlfkb.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_0FPyxY2UFV8e7W3Ff9nPyg_qE2eTWH9";
+  const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const db = supa;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   let secret = sessionStorage.getItem("gb_admin_secret") || "";
